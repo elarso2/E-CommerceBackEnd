@@ -5,15 +5,6 @@ const { Tag, Product, ProductTag } = require("../../models");
 
 router.get("/", (req, res) => {
   // find all tags, include associated product data
-  //   try {
-  //     const tagData = await Tag.findAll({
-  //       include: [{ model: Product, through: ProductTag }],
-  //     });
-  //     res.status(200).json(tagData);
-  //   } catch (err) {
-  //     res.status(500).json(err);
-  //   }
-  // });
   Tag.findAll({
     include: [{ model: Product, through: ProductTag, as: "tag_id" }],
   })
@@ -37,6 +28,7 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
+  // Add a new tag
   /* req.body should look like: 
   {
         "tag_name": "nature",
@@ -51,28 +43,25 @@ router.post("/", async (req, res) => {
 });
 
 router.put("/:id", (req, res) => {
-  Tag.update(req.body, {
-    where: {
-      id: req.params.id,
+  // update a Tag name by its id
+  Tag.update(
+    {
+      tag_name: req.body.tag_name,
     },
-  })
-    .then((tag) => {
-      return ProductTag.findAll({ where: { tag_id: req.params.id } });
+    {
+      where: {
+        id: req.params.id,
+      },
+    }
+  )
+    .then((updatedTag) => {
+      res.status(200).json(updatedTag);
     })
-    .then((productTags) => {
-      const productTagIds = productTags.map(({ product_id }) => product_id);
-      const newProductTags = req.body.productIds
-        .filter((product_id) => !productTagIds.includes(product_id))
-        .map((product_id) => {
-          return {
-            tag_id: req.params.id,
-            product_id,
-          };
-        });
-    });
+    .catch((err) => res.status(500).json(err));
 });
 
 router.delete("/:id", async (req, res) => {
+  // delete a tag by id
   try {
     const tagData = await Tag.destroy({
       where: {

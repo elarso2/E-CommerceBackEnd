@@ -5,7 +5,7 @@ const { Product, Category, Tag, ProductTag } = require("../../models");
 
 // get all products
 router.get("/", (req, res) => {
-  // find all products
+  // find all products, include associated category and tag data
   Product.findAll({
     include: [{ model: Category }, { model: Tag, as: "product_tags" }],
   })
@@ -14,7 +14,6 @@ router.get("/", (req, res) => {
       res.status(500).json(err);
       console.log(err);
     });
-  // be sure to include its associated Category and Tag data
 });
 
 // get one product
@@ -40,10 +39,10 @@ router.get("/:id", async (req, res) => {
 router.post("/", (req, res) => {
   /* req.body should look like this...
     {
-      product_name: "Basketball",
-      price: 200.00,
-      stock: 3,
-      tagIds: [1, 2, 3, 4]
+      "product_name": "Basketball",
+      "price": 200.00,
+      "stock": 3,
+      "tagIds": [1, 2, 3, 4]
     }
   */
   Product.create(req.body)
@@ -110,6 +109,7 @@ router.put("/:id", (req, res) => {
     });
 });
 
+// Delete a product by id
 router.delete("/:id", async (req, res) => {
   try {
     const productData = await Product.destroy({
