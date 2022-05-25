@@ -41,6 +41,10 @@ Gifs provided by my instructor can be viewed below, which give a depiction of th
 
 ![Gif3](./Assets/13-orm-homework-demo-03.gif)
 
+A video demonstration of all my completed routes can be viewed [here](https://drive.google.com/file/d/1-ZGft5yOfgP3JPVx74e77rpijLf5KH1x/view).
+
+The video can also be [downloaded](./Assets/E-Commerce%20Video%20Demonstration.webm).
+
 ## Dependencies
 
 For this program, it is necessary to download the Express, MySQL2, Sequelize, and Dotenv packages.
